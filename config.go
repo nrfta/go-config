@@ -4,11 +4,9 @@ import (
 	"bytes"
 	"flag"
 	"os"
-	"path"
 	"reflect"
-	"runtime"
 	"strings"
-
+	"fmt"
 	"github.com/gobuffalo/packr"
 	"github.com/neighborly/gtoolbox/errors"
 	"github.com/spf13/viper"
@@ -42,43 +40,6 @@ func Load(box packr.Box, config interface{}) errors.Error {
 	return unmarshalConfig(config)
 }
 
-// Deprecated: Use Load(packr.Box, interface{}) to load config from the executable; override with environment variables.
-func LoadConfig(config interface{}) errors.Error {
-	viper.SetConfigType("json")
-
-	execPath, err := GetExecutablePath()
-	if err != nil {
-		return err
-	}
-	viper.AddConfigPath(GetConfigPath(execPath))
-
-	callerPath, err := GetCallerFilePath(2)
-	if err != nil {
-		return err
-	}
-	viper.AddConfigPath(callerPath)
-
-	isConfigRead := false
-	if IsTesting() {
-		// Try config_test.json first
-		viper.SetConfigName("config_test")
-		if err := viper.ReadInConfig(); err == nil {
-			isConfigRead = true
-		} else if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			Logger.Warn("config file config_test.json not found; proceeding with default config")
-		} else {
-			Logger.Warnf("unable to read config from config_test.json because of error \"%s\"; proceeding with default config", err.Error())
-		}
-	}
-	if !isConfigRead {
-		viper.SetConfigName("config")
-		if err := viper.ReadInConfig(); err != nil {
-			return errors.Newf("unable to read config from config.json").WithCause(err)
-		}
-	}
-
-	return unmarshalConfig(config)
-}
 
 func unmarshalConfig(config interface{}) errors.Error {
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
@@ -101,43 +62,19 @@ func unmarshalConfig(config interface{}) errors.Error {
 		env := os.Getenv("ENV")
 		if env != "" {
 			meta.Environment = env
-		} else {
-			env = os.Getenv("DEMETER_ENV")
-			if env != "" {
-				meta.Environment = env
-			}
 		}
 	}
 
 	return nil
 }
 
-func GetCallerFilePath(skip int) (string, errors.Error) {
-	_, filename, _, ok := runtime.Caller(skip)
-	if !ok {
-		return "", errors.New("no caller information")
-	}
-	return path.Dir(filename), nil
-}
-
-func GetConfigPath(rootPath string) string {
-	return path.Join(rootPath, "config")
-}
-
-func GetExecutablePath() (string, errors.Error) {
-	exec, err := os.Executable()
-	if err != nil {
-		return "", errors.Wrap(err)
-	}
-	return path.Dir(exec), nil
-}
-
 func IsTesting() bool {
-	return flag.Lookup("test.v") != nil || os.Getenv("ENV") == "test" || os.Getenv("DEMETER_ENV") == "test"
+	return flag.Lookup("test.v") != nil || os.Getenv("ENV") == "test"
 }
 
 func GetMetaConfig(config interface{}) *MetaConfig {
 	v := reflect.ValueOf(config).Elem()
+	fmt.Println(config);
 	for i := 0; i < v.NumField(); i++ {
 		field := v.Field(i)
 		typ := field.Type()
