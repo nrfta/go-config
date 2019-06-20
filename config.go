@@ -3,13 +3,12 @@ package config
 import (
 	"bytes"
 	"flag"
-	"os"
-	"reflect"
-	"strings"
-	"fmt"
 	"github.com/gobuffalo/packr"
 	"github.com/neighborly/gtoolbox/errors"
 	"github.com/spf13/viper"
+	"os"
+	"reflect"
+	"strings"
 )
 
 type MetaConfig struct {
@@ -39,7 +38,6 @@ func Load(box packr.Box, config interface{}) errors.Error {
 
 	return unmarshalConfig(config)
 }
-
 
 func unmarshalConfig(config interface{}) errors.Error {
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
@@ -74,7 +72,6 @@ func IsTesting() bool {
 
 func GetMetaConfig(config interface{}) *MetaConfig {
 	v := reflect.ValueOf(config).Elem()
-	fmt.Println(config);
 	for i := 0; i < v.NumField(); i++ {
 		field := v.Field(i)
 		typ := field.Type()
