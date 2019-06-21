@@ -1,0 +1,10 @@
+{
+  "Meta": {
+    "environment": "test",
+    "service_name": "demand-api"
+  },
+  "port": 6002,
+  "bugsnag_api_key": "",
+  "segment_write_key": "",
+  "log_level": "error"
+}
