@@ -49,7 +49,7 @@ func unmarshalConfig(config interface{}) errors.Error {
 	}
 
 	// Set the environment to be "test" if tests are being run.
-	meta := GetMetaConfig(config)
+	meta := getMetaConfig(config)
 	if meta == nil {
 		return errors.New("meta config not available")
 	}
@@ -70,7 +70,7 @@ func isTesting() bool {
 	return flag.Lookup("test.v") != nil || os.Getenv("ENV") == "test"
 }
 
-func GetMetaConfig(config interface{}) *MetaConfig {
+func getMetaConfig(config interface{}) *MetaConfig {
 	v := reflect.ValueOf(config).Elem()
 	for i := 0; i < v.NumField(); i++ {
 		field := v.Field(i)
@@ -82,7 +82,7 @@ func GetMetaConfig(config interface{}) *MetaConfig {
 	for i := 0; i < v.NumField(); i++ {
 		field := v.Field(i)
 		if field.CanAddr() {
-			if meta := GetMetaConfig(field.Addr().Interface()); meta != nil {
+			if meta := getMetaConfig(field.Addr().Interface()); meta != nil {
 				return meta
 			}
 		}
