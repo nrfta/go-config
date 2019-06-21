@@ -14,8 +14,8 @@ go get github.com/neighborly/go-config
 
 To load the config data into a struct you will need two parameters 
 
-1) a variable of type box:   To get the box type you will need to import ``` github.com/gobuffalo/packr``` . The box variable will hold the config data in the binary 
-2) a variable of type "customStruct" where customStruct is a struct you define to mirror the key values of your config   
+1) a variable of type **box**:   To get the box type you will need to import ``` github.com/gobuffalo/packr``` . The box variable will hold the config data in the binary 
+2) a variable of type **"customStruct"** where customStruct is a struct you define to mirror the key values of your config   
 
 
 ### Example  
