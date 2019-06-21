@@ -32,9 +32,3 @@ var _ = Describe("Test Load ", func() {
 
 })
 
-var _ = Describe("Test GetMetaConfig ", func() {
-	It("It should get the  meta values of the  config ", func() {
-		Expect(config.GetMetaConfig(&testConfig)).To(Not(BeNil()))
-	})
-
-})

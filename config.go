@@ -21,7 +21,7 @@ func Load(box packr.Box, config interface{}) errors.Error {
 	viper.SetConfigType(configType)
 
 	configName := "config"
-	if IsTesting() {
+	if isTesting() {
 		configName = "config_test"
 	}
 	viper.SetConfigName(configName)
@@ -54,7 +54,7 @@ func unmarshalConfig(config interface{}) errors.Error {
 		return errors.New("meta config not available")
 	}
 
-	if IsTesting() {
+	if isTesting() {
 		meta.Environment = "test"
 	} else {
 		env := os.Getenv("ENV")
@@ -66,7 +66,7 @@ func unmarshalConfig(config interface{}) errors.Error {
 	return nil
 }
 
-func IsTesting() bool {
+func isTesting() bool {
 	return flag.Lookup("test.v") != nil || os.Getenv("ENV") == "test"
 }
 
