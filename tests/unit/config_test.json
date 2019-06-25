@@ -4,7 +4,7 @@
     "service_name": "demand-api"
   },
   "port": 6002,
-  "bugsnag_api_key": "",
-  "segment_write_key": "",
+  "bugsnag_api_key": "test-key",
+  "segment_write_key": "test-write-key",
   "log_level": "error"
 }
