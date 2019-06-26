@@ -11,14 +11,15 @@ import (
 	"github.com/spf13/viper"
 
 	"github.com/neighborly/go-errors"
-
 )
 
+// MetaConfig holds configuration for environment name and service name
 type MetaConfig struct {
 	Environment string
 	ServiceName string `mapstructure:"service_name"`
 }
 
+// Load config from file then from environment variables
 func Load(box packr.Box, config interface{}) error {
 	configType := "json"
 	viper.SetConfigType(configType)
@@ -32,11 +33,11 @@ func Load(box packr.Box, config interface{}) error {
 	configFile := configName + "." + configType
 	contents, err := box.Find(configFile)
 	if err != nil {
-		return errors.Wrapf(err,"unable to read config from %s", configFile)
+		return errors.Wrapf(err, "unable to read config from %s", configFile)
 	}
 
 	if err := viper.ReadConfig(bytes.NewReader(contents)); err != nil {
-		return errors.Wrapf(err,"unable to read config from %s", configFile)
+		return errors.Wrapf(err, "unable to read config from %s", configFile)
 	}
 
 	return unmarshalConfig(config)
@@ -48,7 +49,7 @@ func unmarshalConfig(config interface{}) error {
 
 	// Read the config file again and consider environment variables at the same time
 	if err := viper.Unmarshal(config); err != nil {
-		return errors.Wrapf(err,"unable to unmarshal config at %s", viper.ConfigFileUsed())
+		return errors.Wrapf(err, "unable to unmarshal config at %s", viper.ConfigFileUsed())
 	}
 
 	// Set the environment to be "test" if tests are being run.

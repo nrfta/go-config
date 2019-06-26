@@ -3,15 +3,14 @@ package config_test
 import (
 	"os"
 
-	"github.com/gobuffalo/packr"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
+	"github.com/gobuffalo/packr"
 	"github.com/neighborly/go-config"
-
 )
 
-type DemandAPI struct {
+type MyAppConfig struct {
 	Meta config.MetaConfig
 
 	Port            int    `mapstructure:"port"`
@@ -23,25 +22,21 @@ type DemandAPI struct {
 
 var (
 	testBox    = packr.NewBox(".")
-	testConfig DemandAPI
+	testConfig MyAppConfig
 )
 
 var _ = Describe("Test Load ", func() {
 	It("It should load config file", func() {
-
 		Expect(config.Load(testBox, &testConfig)).To(Succeed())
 
 		Expect(testConfig.Meta.Environment).To(Equal("test"))
-		Expect(testConfig.Meta.ServiceName).To(Equal("demand-api"))
+		Expect(testConfig.Meta.ServiceName).To(Equal("my-app"))
 		Expect(testConfig.BugsnagAPIKey).To(Equal("test-key"))
 		Expect(testConfig.SegmentWriteKey).To(Equal("test-write-key"))
 		Expect(testConfig.LogLevel).To(Equal("error"))
 		Expect(testConfig.Port).To(Equal(6002))
-
 	})
-
 })
-
 
 var _ = Describe("Test Load With Environment Variables", func() {
 	It("It should load config file with environment variables", func() {
@@ -49,7 +44,6 @@ var _ = Describe("Test Load With Environment Variables", func() {
 		os.Setenv("META_SERVICE_NAME", "service-api")
 
 		Expect(config.Load(testBox, &testConfig)).To(Succeed())
-
 
 		Expect(testConfig.Meta.Environment).To(Equal("test"))
 		Expect(testConfig.Meta.ServiceName).To(Equal("service-api"))
@@ -60,9 +54,5 @@ var _ = Describe("Test Load With Environment Variables", func() {
 
 		os.Unsetenv("PORT")
 		os.Unsetenv("META_SERVICE_NAME")
-
 	})
-
 })
-
-
