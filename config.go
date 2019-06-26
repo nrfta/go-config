@@ -3,12 +3,15 @@ package config
 import (
 	"bytes"
 	"flag"
-	"github.com/gobuffalo/packr"
-	"github.com/neighborly/gtoolbox/errors"
-	"github.com/spf13/viper"
 	"os"
 	"reflect"
 	"strings"
+
+	"github.com/gobuffalo/packr"
+	"github.com/spf13/viper"
+
+	"github.com/neighborly/go-errors"
+
 )
 
 type MetaConfig struct {
@@ -16,7 +19,7 @@ type MetaConfig struct {
 	ServiceName string `mapstructure:"service_name"`
 }
 
-func Load(box packr.Box, config interface{}) errors.Error {
+func Load(box packr.Box, config interface{}) error {
 	configType := "json"
 	viper.SetConfigType(configType)
 
@@ -29,23 +32,23 @@ func Load(box packr.Box, config interface{}) errors.Error {
 	configFile := configName + "." + configType
 	contents, err := box.Find(configFile)
 	if err != nil {
-		return errors.Newf("unable to read config from %s", configFile).WithCause(err)
+		return errors.Wrapf(err,"unable to read config from %s", configFile)
 	}
 
 	if err := viper.ReadConfig(bytes.NewReader(contents)); err != nil {
-		return errors.Newf("unable to read config from %s", configFile).WithCause(err)
+		return errors.Wrapf(err,"unable to read config from %s", configFile)
 	}
 
 	return unmarshalConfig(config)
 }
 
-func unmarshalConfig(config interface{}) errors.Error {
+func unmarshalConfig(config interface{}) error {
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	viper.AutomaticEnv()
 
 	// Read the config file again and consider environment variables at the same time
 	if err := viper.Unmarshal(config); err != nil {
-		return errors.Newf("unable to unmarshal config at %s", viper.ConfigFileUsed()).WithCause(err)
+		return errors.Wrapf(err,"unable to unmarshal config at %s", viper.ConfigFileUsed())
 	}
 
 	// Set the environment to be "test" if tests are being run.
