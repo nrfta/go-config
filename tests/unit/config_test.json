@@ -1,7 +1,7 @@
 {
   "Meta": {
     "environment": "test",
-    "service_name": "demand-api"
+    "service_name": "my-app"
   },
   "port": 6002,
   "bugsnag_api_key": "test-key",
