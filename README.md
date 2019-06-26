@@ -20,11 +20,11 @@ To load the config data into a struct you will need two parameters
 Consider this example config content
 
 ```json
-// path: folder/config.json
+// config/config.json
 {
   "Meta": {
-    "environment": "test",
-    "service_name": "demand-api"
+    "environment": "development",
+    "service_name": "my-app"
   },
   "port": 6002,
   "bugsnag_api_key": "",
@@ -36,14 +36,15 @@ Consider this example config content
 In the file you want to load the config in do the following:
 
 ```go
-// path folder/file.go
+// config/config.go
 
 import (
 	"github.com/gobuffalo/packr"
 	"github.com/neighborly/go-config"
 )
-// this DemandAPI struct is the "custom struct" it has the same attributes that mirror the config json above
-type DemandAPI struct {
+
+// this MyAppConfig struct is the "custom struct" it has the same attributes that mirror the config json above
+type MyAppConfig struct {
 	Meta config.MetaConfig
 
 	Port            int    `mapstructure:"port"`
@@ -55,11 +56,15 @@ type DemandAPI struct {
 
 // the definition of our two paramaters
 var (
-	testBox    = packr.NewBox("path to config data")
-	testConfig DemandAPI
+	Config MyAppConfig
 )
 
-config.Load(testBox, &testConfig) // now the config data has been loaded into testConfig
+func init() {
+	err := config.Load(packr.NewBox("."), &Config) // now the config data has been loaded into appConfig
+	if err != nil {
+		panic(err)
+	}
+}
 ```
 
 ## License
