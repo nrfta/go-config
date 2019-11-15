@@ -1,4 +1,4 @@
-# go-config [![Build Status](https://travis-ci.com/neighborly/go-config.svg?branch=master)](https://travis-ci.com/neighborly/go-config)
+# go-config ![](https://github.com/neighborly/go-config/workflows/CI/badge.svg)
 
 This package loads config information into a struct. It uses [viper](https://github.com/spf13/viper).
 
