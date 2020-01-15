@@ -2,7 +2,6 @@ package config
 
 import (
 	"bytes"
-	"flag"
 	"os"
 	"reflect"
 	"strings"
@@ -71,7 +70,12 @@ func unmarshalConfig(config interface{}) error {
 }
 
 func isTesting() bool {
-	return flag.Lookup("test.v") != nil || os.Getenv("ENV") == "test"
+	for _, arg := range os.Args {
+		if strings.HasPrefix(arg, "-test.v=") {
+			return true
+		}
+	}
+	return false || os.Getenv("ENV") == "test"
 }
 
 func getMetaConfig(config interface{}) *MetaConfig {
