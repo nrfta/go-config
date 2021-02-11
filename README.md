@@ -12,7 +12,7 @@ go get github.com/nrfta/go-config/v2
 
 To load the config data into a struct you will need two parameters
 
-1) a variable of type **box**:   To get the box type you will need to import ``` github.com/gobuffalo/packr``` . The box variable will hold the config data in the binary
+1) a variable of type **box**:   To get the box type you will need to import ``` github.com/gobuffalo/packr/v2``` . The box variable will hold the config data in the binary
 2) a variable of type **"customStruct"** where customStruct is a struct you define to mirror the key values of your config
 
 ### Example
@@ -39,7 +39,7 @@ In the file you want to load the config in do the following:
 // config/config.go
 
 import (
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/nrfta/go-config/v2"
 )
 
@@ -60,7 +60,8 @@ var (
 )
 
 func init() {
-	err := config.Load(packr.NewBox("."), &Config) // now the config data has been loaded into appConfig
+	box := packr.New("config", ".")
+	err := config.Load(box, &Config) // now the config data has been loaded into appConfig
 	if err != nil {
 		panic(err)
 	}
