@@ -6,7 +6,7 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/neighborly/go-config"
 )
 
@@ -21,7 +21,7 @@ type MyAppConfig struct {
 }
 
 var (
-	testBox    = packr.NewBox(".")
+	testBox    = packr.New("config",".")
 	testConfig MyAppConfig
 )
 
