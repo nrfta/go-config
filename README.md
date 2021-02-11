@@ -1,11 +1,11 @@
-# go-config ![](https://github.com/neighborly/go-config/workflows/CI/badge.svg)
+# go-config ![](https://github.com/nrfta/go-config/v2/workflows/CI/badge.svg)
 
 This package loads config information into a struct. It uses [viper](https://github.com/spf13/viper).
 
 ## Installation
 
 ```sh
-go get github.com/neighborly/go-config
+go get github.com/nrfta/go-config/v2
 ```
 
 ## Usage
@@ -40,7 +40,7 @@ In the file you want to load the config in do the following:
 
 import (
 	"github.com/gobuffalo/packr"
-	"github.com/neighborly/go-config"
+	"github.com/nrfta/go-config/v2"
 )
 
 // this MyAppConfig struct is the "custom struct" it has the same attributes that mirror the config json above

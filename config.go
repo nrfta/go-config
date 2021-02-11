@@ -3,10 +3,13 @@ package config
 import (
 	"bytes"
 	"os"
+	"path"
 	"reflect"
+	"runtime"
 	"strings"
 
 	"github.com/gobuffalo/packr/v2"
+	"github.com/gobuffalo/packr/v2/file/resolver"
 	"github.com/spf13/viper"
 
 	"github.com/neighborly/go-errors"
@@ -20,6 +23,10 @@ type MetaConfig struct {
 
 // Load config from file then from environment variables
 func Load(box *packr.Box, config interface{}) error {
+	_, filename, _, _ := runtime.Caller(1)
+	resolverRoot := path.Clean(path.Join(path.Dir(filename), box.Path))
+	box.DefaultResolver = &resolver.Disk{Root: resolverRoot}
+
 	configType := "json"
 	viper.SetConfigType(configType)
 
@@ -29,7 +36,7 @@ func Load(box *packr.Box, config interface{}) error {
 	}
 	viper.SetConfigName(configName)
 
-	configFile := configName + "." + configType
+	configFile := path.Join(box.Path, configName + "." + configType)
 	contents, err := box.Find(configFile)
 	if err != nil {
 		return errors.Wrapf(err, "unable to read config from %s", configFile)

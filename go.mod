@@ -1,4 +1,4 @@
-module github.com/neighborly/go-config
+module github.com/nrfta/go-config/v2
 
 go 1.13
 

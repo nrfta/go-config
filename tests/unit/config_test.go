@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	"github.com/gobuffalo/packr/v2"
-	"github.com/neighborly/go-config"
+	"github.com/nrfta/go-config/v2"
 )
 
 type MyAppConfig struct {
@@ -21,9 +21,14 @@ type MyAppConfig struct {
 }
 
 var (
-	testBox    = packr.New("config",".")
+	testBox    *packr.Box
 	testConfig MyAppConfig
 )
+
+var _ = BeforeEach(func() {
+	testBox = packr.New("name", "..") // relative to this file path
+	testConfig = MyAppConfig{}
+})
 
 var _ = Describe("Test Load ", func() {
 	It("It should load config file", func() {
