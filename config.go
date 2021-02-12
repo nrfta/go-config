@@ -23,8 +23,15 @@ type MetaConfig struct {
 
 // Load config from file then from environment variables
 func Load(box *packr.Box, config interface{}) error {
-	_, filename, _, _ := runtime.Caller(1)
-	resolverRoot := path.Clean(path.Join(path.Dir(filename), box.Path))
+
+	var resolverRoot string
+	// when debugging a main package, the Box path will be a full path
+	if strings.HasPrefix(box.Path, "/") {
+		resolverRoot = box.Path
+	} else { // the Box path is relative, append to the config file's path
+		_, filename, _, _ := runtime.Caller(1)
+		resolverRoot = path.Clean(path.Join(path.Dir(filename), box.Path))
+	}
 	box.DefaultResolver = &resolver.Disk{Root: resolverRoot}
 
 	configType := "json"
