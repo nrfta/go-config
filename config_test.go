@@ -1,14 +1,17 @@
 package config_test
 
 import (
+	"embed"
 	"os"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	"github.com/gobuffalo/packr"
-	"github.com/neighborly/go-config"
+	"github.com/nrfta/go-config/v2"
 )
+
+//go:embed config_test.json
+var fs embed.FS
 
 type MyAppConfig struct {
 	Meta config.MetaConfig
@@ -21,13 +24,12 @@ type MyAppConfig struct {
 }
 
 var (
-	testBox    = packr.NewBox(".")
 	testConfig MyAppConfig
 )
 
 var _ = Describe("Test Load ", func() {
 	It("It should load config file", func() {
-		Expect(config.Load(testBox, &testConfig)).To(Succeed())
+		Expect(config.Load(fs, &testConfig)).To(Succeed())
 
 		Expect(testConfig.Meta.Environment).To(Equal("test"))
 		Expect(testConfig.Meta.ServiceName).To(Equal("my-app"))
@@ -43,7 +45,7 @@ var _ = Describe("Test Load With Environment Variables", func() {
 		os.Setenv("PORT", "5001")
 		os.Setenv("META_SERVICE_NAME", "service-api")
 
-		Expect(config.Load(testBox, &testConfig)).To(Succeed())
+		Expect(config.Load(fs, &testConfig)).To(Succeed())
 
 		Expect(testConfig.Meta.Environment).To(Equal("test"))
 		Expect(testConfig.Meta.ServiceName).To(Equal("service-api"))
