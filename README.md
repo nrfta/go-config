@@ -1,19 +1,14 @@
-# go-config ![](https://github.com/neighborly/go-config/workflows/CI/badge.svg)
+# go-config ![](https://github.com/nrfta/go-config/workflows/CI/badge.svg)
 
 This package loads config information into a struct. It uses [viper](https://github.com/spf13/viper).
 
 ## Installation
 
 ```sh
-go get github.com/neighborly/go-config
+go get github.com/nrfta/go-config/v2
 ```
 
 ## Usage
-
-To load the config data into a struct you will need two parameters
-
-1) a variable of type **box**:   To get the box type you will need to import ``` github.com/gobuffalo/packr``` . The box variable will hold the config data in the binary
-2) a variable of type **"customStruct"** where customStruct is a struct you define to mirror the key values of your config
 
 ### Example
 
@@ -39,8 +34,9 @@ In the file you want to load the config in do the following:
 // config/config.go
 
 import (
-	"github.com/gobuffalo/packr"
-	"github.com/neighborly/go-config"
+    "embed"
+
+	"github.com/nrfta/go-config/v2"
 )
 
 // this MyAppConfig struct is the "custom struct" it has the same attributes that mirror the config json above
@@ -54,13 +50,16 @@ type MyAppConfig struct {
 	SegmentWriteKey string `mapstructure:"segment_write_key"`
 }
 
+//go:embed config.json config_test.json
+var fs embed.FS
+
 // the definition of our two paramaters
 var (
 	Config MyAppConfig
 )
 
 func init() {
-	err := config.Load(packr.NewBox("."), &Config) // now the config data has been loaded into appConfig
+	err := config.Load(fs, &Config) // now the config data has been loaded into Config
 	if err != nil {
 		panic(err)
 	}
