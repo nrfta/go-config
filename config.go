@@ -2,7 +2,6 @@ package config
 
 import (
 	"bytes"
-	"embed"
 	"errors"
 	"fmt"
 	"os"
@@ -18,8 +17,12 @@ type MetaConfig struct {
 	ServiceName string `mapstructure:"service_name"`
 }
 
+type fileSystem interface {
+	ReadFile(name string) ([]byte, error)
+}
+
 // Load config from file then from environment variables
-func Load(fs embed.FS, config interface{}) error {
+func Load(fs fileSystem, config interface{}) error {
 	configType := "json"
 	viper.SetConfigType(configType)
 

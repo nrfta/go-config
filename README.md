@@ -5,7 +5,7 @@ This package loads config information into a struct. It uses [viper](https://git
 ## Installation
 
 ```sh
-go get github.com/nrfta/go-config/v2
+go get github.com/nrfta/go-config/v3
 ```
 
 ## Usage
@@ -36,7 +36,7 @@ In the file you want to load the config in do the following:
 import (
     "embed"
 
-	"github.com/nrfta/go-config/v2"
+	"github.com/nrfta/go-config/v3"
 )
 
 // this MyAppConfig struct is the "custom struct" it has the same attributes that mirror the config json above

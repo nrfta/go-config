@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	"github.com/nrfta/go-config/v2"
+	"github.com/nrfta/go-config/v3"
 )
 
 //go:embed config_test.json
