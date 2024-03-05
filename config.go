@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"reflect"
 	"strings"
@@ -39,8 +40,15 @@ func Load(fs fileSystem, config interface{}) error {
 		return fmt.Errorf("unable to read config from %s: %w", configFile, err)
 	}
 
-	if err := viper.ReadConfig(bytes.NewReader(contents)); err != nil {
-		return fmt.Errorf("unable to read config from %s: %w", configFile, err)
+	return ReadJSON(bytes.NewReader(contents), config)
+}
+
+func ReadJSON(in io.Reader, config interface{}) error {
+	configType := "json"
+	viper.SetConfigType(configType)
+
+	if err := viper.ReadConfig(in); err != nil {
+		return fmt.Errorf("unable to read config: %v", err)
 	}
 
 	return unmarshalConfig(config)
