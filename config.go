@@ -16,6 +16,7 @@ import (
 type MetaConfig struct {
 	Environment string
 	ServiceName string `mapstructure:"service_name"`
+	Region      string `mapstructure:"region"`
 }
 
 type fileSystem interface {
