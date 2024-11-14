@@ -88,11 +88,12 @@ func unmarshalConfig(config interface{}) error {
 
 func isTesting() bool {
 	for _, arg := range os.Args {
-		if strings.HasPrefix(arg, "-test.v=") {
+		if strings.Contains(arg, "-test") || strings.Contains(arg, ".test") {
 			return true
 		}
 	}
-	return false || os.Getenv("ENV") == "test"
+
+	return os.Getenv("ENV") == "test"
 }
 
 func getMetaConfig(config interface{}) *MetaConfig {
